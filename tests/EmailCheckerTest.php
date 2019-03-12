@@ -7,6 +7,7 @@
  */
 use PHPUnit\Framework\TestCase;
 use Tintnaingwin\EmailChecker\EmailChecker;
+use Tintnaingwin\EmailChecker\EmailCheckerException;
 
 class EmailCheckerTest extends TestCase
 {
@@ -28,11 +29,17 @@ class EmailCheckerTest extends TestCase
 
     public function testEmailCheckerIsFalse()
     {
-        $this->assertFalse($this->email_checker->check('example@example.com'));
+        $this->assertFalse($this->email_checker->check('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1234567890@gmail.com'));
     }
 
     public function testDisposableMailIsFalse()
     {
         $this->assertFalse($this->email_checker->check('amigo.k8@0-mail.com'));
     }
+
+    /*public function testEmailCheckerHasError()
+    {
+        $this->expectException(EmailCheckerException::class);
+        $validationReturn = $this->email_checker->check('example@example.com');
+    }*/
 }

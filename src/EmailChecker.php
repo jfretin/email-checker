@@ -15,6 +15,20 @@ class EmailChecker
     protected $socket;
 
     /**
+     * fsockopen error number.
+     *
+     * @var 
+     */
+    protected $errno;
+
+    /**
+     * fsockopen error message.
+     *
+     * @var 
+     */
+    protected $errstr;
+
+    /**
      * @var
      */
     protected $user;
@@ -79,10 +93,14 @@ class EmailChecker
 
         // connect to SMTP
         foreach ($mxs as $host => $value) {
-            if ($this->socket = @fsockopen($host, $this->port, $errno, $errstr, (float) $timeout)) {
+            if ($this->socket = @fsockopen($host, $this->port, $this->errno, $this->errstr, (float) $timeout)) {
                 stream_set_timeout($this->socket, $this->max_read_time);
                 break;
             }
+        }
+
+        if ($this->errno > 0) {
+            throw new EmailCheckerException($this->errstr, $this->errno);
         }
 
         if ($this->socket) {
@@ -187,5 +205,9 @@ class EmailChecker
         $this->send('quit');
         // close socket
         fclose($this->socket);
+    }
+
+    public function getSockErrors() {
+        return array("errno" => $this->errno, "errstr" => $this->errstr);
     }
 }
