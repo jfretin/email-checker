@@ -42,4 +42,19 @@ class EmailCheckerTest extends TestCase
         $this->expectException(EmailCheckerException::class);
         $validationReturn = $this->email_checker->check('example@example.com');
     }*/
+
+    public function testAddDisposableDomain()
+    {
+        $this->email_checker->addDisposable('facebook.com');
+        // random email
+        $this->assertFalse($this->email_checker->check('6549874654964974@facebook.com'));
+    }
+
+    public function testExcludeDisposableDomain()
+    {
+        $this->assertFalse($this->email_checker->check('test@gmatch.org'));
+        $this->email_checker->excludeDisposable('gmatch.org');
+        // random email
+        $this->assertTrue($this->email_checker->check('test@gmatch.org'));
+    }
 }

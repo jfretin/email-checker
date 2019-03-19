@@ -65,9 +65,31 @@ class EmailChecker
      */
     protected $nameServers = ['192.168.0.1'];
 
+    /**
+     * Additional disposable domains
+     * @var array
+     */
+    protected $additionalDisposable = [];
+
+    /**
+     * Exclude domains from default disposable domains
+     * @var array
+     */
+    protected $excludeFromDisposable = [];
+
+    public function addDisposable($domain) {
+        $this->additionalDisposable[] = $domain;
+    }
+
+    public function excludeDisposable($domain) {
+        $this->excludeFromDisposable[] = $domain;
+    }
+
     public function check($email = false)
     {
         $disposable = json_decode(file_get_contents(__DIR__.'/json/list.json'), true);
+        $disposable = array_merge($disposable, $this->additionalDisposable);
+        $disposable = array_diff($disposable, $this->excludeFromDisposable);
 
         if ($email) {
             $this->setEmail($email);
