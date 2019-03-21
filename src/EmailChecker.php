@@ -58,7 +58,7 @@ class EmailChecker
     /**
      * Maximum Read Time from socket.
      */
-    protected $max_read_time = 5;
+    protected $max_read_time = 10;
 
     /**
      * @var
