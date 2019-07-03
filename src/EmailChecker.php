@@ -77,6 +77,16 @@ class EmailChecker
      */
     protected $excludeFromDisposable = [];
 
+    /**
+     * Exclude domains from being checked. Maybe trusted domains?
+     * @var array
+     */
+    protected $trustedDomains = [];
+
+    public function addTrustedDomain($domain) {
+        $this->trustedDomains[] = $domain;
+    }
+
     public function addDisposable($domain) {
         $this->additionalDisposable[] = $domain;
     }
@@ -93,6 +103,10 @@ class EmailChecker
 
         if ($email) {
             $this->setEmail($email);
+        }
+
+        if (in_array($this->domain, $this->trustedDomains)) {
+            return true;
         }
 
         if (in_array($this->domain, $disposable)) {
